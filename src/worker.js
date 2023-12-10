@@ -145,7 +145,8 @@ function setupEventListeners(socket) {
     });    
 }
 
-async function handleDepth(depthStream) {    
+async function handleDepth(depthStream) {  
+    let depth_snapshot; // realized I do need this line in prod lol, ofc  
     let finalUpdateId = depthStream.u;
     let firstUpdateId = depthStream.U;
     let previousFinalUpdateId = depthStream.pu;
