@@ -1,6 +1,7 @@
 <script>
 import SymbolForm from './components/SymbolForm.vue'
 import BubbleChart from './components/BubbleChart.vue'
+import MyWorker from './worker?worker';
 
 export default {
   name: 'App',
@@ -29,7 +30,7 @@ export default {
   },
 
   mounted() {
-    this.worker = new Worker('src/worker.js');
+    this.worker = new MyWorker();
 
     this.worker.onmessage = (event) => {
       if (event.data.type === 'u') {
