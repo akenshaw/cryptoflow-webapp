@@ -8,7 +8,7 @@
   library.add(faUpRightAndDownLeftFromCenter, faDownLeftAndUpRightToCenter, faLock, faLockOpen, faTrash)
 
   import { Line, Bubble, Bar, Scatter } from 'vue-chartjs'
-  import { Chart as ChartJS, Title, Tooltip, Legend, PointElement, LineElement, LinearScale, TimeSeriesScale, BarElement, CategoryScale} from 'chart.js'
+  import { Chart as ChartJS, Title, Tooltip, Legend, PointElement, LineElement, LinearScale, TimeSeriesScale, BarElement, CategoryScale} from 'chart.js/auto'
   import 'chartjs-adapter-luxon';
   import zoomPlugin from 'chartjs-plugin-zoom';
 
