@@ -9,8 +9,9 @@ class OrderBook {
 
         return {'bids': bids_array, 'asks': asks_array};
     };
-
+    
     async refresh_order_book(symbol) {
+
         currentSymbol = symbol;
         let controller = new AbortController();
         let intervalId = setInterval(async () => {
