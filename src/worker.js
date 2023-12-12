@@ -30,7 +30,7 @@ class OrderBook {
                     }
                 }
             }
-        }, 5000);
+        }, 6000);
     }
 
     async update_order_book(new_bids, new_asks) {
@@ -42,9 +42,6 @@ class OrderBook {
     };
 
     async prepare_order_book(bids, asks, new_bids, new_asks) {    
-        new_bids = new_bids.filter(bid => bid[0] >= bids[bids.length-1][0]);
-        new_asks = new_asks.filter(ask => ask[0] <= asks[asks.length-1][0]);
-    
         const bidsMap = new Map(new_bids.map(bid => [bid[0], bid[1]]));
         const asksMap = new Map(new_asks.map(ask => [ask[0], ask[1]]));
     
@@ -56,9 +53,9 @@ class OrderBook {
     
         bids = bids.filter(bid => bid[1] !== 0).sort((a, b) => b[0] - a[0]);
         asks = asks.filter(ask => ask[1] !== 0).sort((a, b) => a[0] - b[0]);
-
+    
         return [bids, asks];
-    }
+    };
 }
 
 let socket;
@@ -146,7 +143,7 @@ function setupEventListeners(socket) {
 }
 
 async function handleDepth(depthStream) {  
-    let depth_snapshot; // realized I do need this line in prod lol, ofc  
+    let depth_snapshot;  
     let finalUpdateId = depthStream.u;
     let firstUpdateId = depthStream.U;
     let previousFinalUpdateId = depthStream.pu;
@@ -173,7 +170,7 @@ async function handleDepth(depthStream) {
         return;
     } 
 
-    order_book.update_order_book(depthStream.b, depthStream.a);
+    await order_book.update_order_book(depthStream.b, depthStream.a);
     last_update_id = finalUpdateId;
 
     self.postMessage({ type: 'u', depth: order_book.order_book, tradesBuffer: aggTradeBuffer, update_time: depthStream.E });
@@ -181,7 +178,6 @@ async function handleDepth(depthStream) {
 }
 
 async function fetchOrderbook(lowercaseSymbol) {
-    //console.log('Fetching order book for symbol:', lowercaseSymbol);
     const response = await fetch(`https://fapi.binance.com/fapi/v1/depth?symbol=${lowercaseSymbol}&limit=500`);
     const data = await response.json();
     return data;

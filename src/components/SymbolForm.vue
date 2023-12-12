@@ -171,7 +171,6 @@
       async fetch24hrMetrics() {
         let turnovers_dict = {};
 
-        console.log('Fetching 24 hr rolling ticker metrics from API...');
         const response = await fetch(`https://fapi.binance.com/fapi/v1/ticker/24hr`);
         const data = await response.json();
         for (let i of data) {
@@ -189,7 +188,6 @@
       async fetchPremiumIndexes() {
         let fr_dict = {};
 
-        console.log('Fetching premium indexes for all symbols...');
         const response = await fetch(`https://fapi.binance.com/fapi/v1/premiumIndex`);
         const data = await response.json();
         
@@ -206,7 +204,6 @@
         return fr_dict;
       },
       async rollingMetrics(symbol) {
-        console.log('Fetching 24 hr rolling ticker metrics from API...');
         const response = await fetch(`https://fapi.binance.com/fapi/v1/ticker/24hr?symbol=${symbol}`);
         const data = await response.json();
 
@@ -344,7 +341,6 @@
 
       setInterval(() => {
         if(this.symbolName) {
-          console.log('Fetching OI and funding rate from API...');
           this.compare_OI(this.symbolName);
           this.rollingMetrics(this.symbolName);
         }
