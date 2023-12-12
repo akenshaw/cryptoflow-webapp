@@ -11,7 +11,6 @@ class OrderBook {
     };
     
     async refresh_order_book(symbol) {
-
         currentSymbol = symbol;
         let controller = new AbortController();
         let intervalId = setInterval(async () => {
@@ -58,6 +57,8 @@ class OrderBook {
         return [bids, asks];
     };
 }
+
+console.log("worker version 0.1.0-alpha");
 
 let socket;
 let aggTradeBuffer = [];
