@@ -507,6 +507,7 @@
     border: none;
     font-size: 0.6vw;
     background: #17131A;
+    color: rgb(200, 200, 200);
   }
 
   #symbolInputContainer input[type=text]:hover {

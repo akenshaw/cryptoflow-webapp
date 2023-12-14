@@ -1,3 +1,5 @@
+console.log("worker_v0.1.1-alpha");
+
 class OrderBook {
     constructor(bids, asks) {
         this.order_book = this.initialize_order_book(bids, asks);
@@ -42,9 +44,12 @@ class OrderBook {
     };
 
     async prepare_order_book(bids, asks, new_bids, new_asks) {    
+        new_bids = new_bids.filter(bid => bid[0] >= bids[bids.length-1][0]);
+        new_asks = new_asks.filter(ask => ask[0] <= asks[asks.length-1][0]);
+
         const bidsMap = new Map(new_bids.map(bid => [bid[0], bid[1]]));
         const asksMap = new Map(new_asks.map(ask => [ask[0], ask[1]]));
-    
+
         bids = bids.map(bid => [bid[0], bidsMap.has(bid[0]) ? bidsMap.get(bid[0]) : bid[1]]);
         asks = asks.map(ask => [ask[0], asksMap.has(ask[0]) ? asksMap.get(ask[0]) : ask[1]]);
     
@@ -57,8 +62,6 @@ class OrderBook {
         return [bids, asks];
     };
 }
-
-console.log("worker version 0.1.0-alpha");
 
 let socket;
 let aggTradeBuffer = [];
@@ -145,7 +148,6 @@ function setupEventListeners(socket) {
 }
 
 async function handleDepth(depthStream) {  
-    let depth_snapshot;  
     let finalUpdateId = depthStream.u;
     let firstUpdateId = depthStream.U;
     let previousFinalUpdateId = depthStream.pu;
@@ -158,24 +160,26 @@ async function handleDepth(depthStream) {
             console.log("First processed event succeed.")
             is_first_event = false;
         } else {
-            console.log('Out of sync at the first event, reinitializing order book...');
-            depth_snapshot = await fetchOrderbook(lowercaseSymbol);
-            last_update_id = depth_snapshot.lastUpdateId;
-            await order_book.update_order_book(depth_snapshot.bids, depth_snapshot.asks);
+            await reinitializeOrderBook();
             return;
         }
     } else if (previousFinalUpdateId != last_update_id) {
-        console.log('Out of sync, reinitializing order book...');
-        depth_snapshot = await fetchOrderbook(lowercaseSymbol);
-        last_update_id = depth_snapshot.lastUpdateId;
-        await order_book.update_order_book(depth_snapshot.bids, depth_snapshot.asks);
+        await reinitializeOrderBook();
         return;
-    } 
+    }    
 
     await order_book.update_order_book(depthStream.b, depthStream.a);
     last_update_id = finalUpdateId;
 
     self.postMessage({ type: 'u', depth: order_book.order_book, tradesBuffer: aggTradeBuffer, update_time: depthStream.E });
+    aggTradeBuffer = [];
+}
+
+async function reinitializeOrderBook() {
+    console.log('Out of sync, reinitializing order book...');
+    const depth_snapshot = await fetchOrderbook(lowercaseSymbol);
+    last_update_id = depth_snapshot.lastUpdateId;
+    order_book.order_book = order_book.initialize_order_book(depth_snapshot.bids, depth_snapshot.asks);
     aggTradeBuffer = [];
 }
 
