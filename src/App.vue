@@ -16,6 +16,8 @@ export default {
       isBubbleChartFullScreen: false,
       auto_scale: true,
       tickerPrice: null,
+      isFirstMessage: true,
+      annenLoading: false,
     };
   },
 
@@ -31,24 +33,31 @@ export default {
 
   mounted() {
     this.worker = new MyWorker();
-
+    
     this.worker.onmessage = (event) => {
       if (event.data.type === 'u') {
+        if (this.isFirstMessage) {
+          this.annenLoading = false;
+          this.isFirstMessage = false;
+          this.showBubbleChart = true;
+        }
         this.rawData = event.data;
         if (!this.isBubbleChartFullScreen) { 
           this.tickerPrice = parseFloat(event.data.depth.bids[0][0]); 
         }
         
       } else if (event.data.type === 1) {
-        console.log('WebSocket connection opened');      
-        this.showBubbleChart = true;          
-
+        console.log('WebSocket connection opened'); 
+        this.isFirstMessage = true;  
+        this.annenLoading = true; 
+                
       } else if (event.data.type === 0) {
         console.log('Closing previous websocket connection...');
 
         this.rawData = {};
         this.$nextTick(() => {
           this.showBubbleChart = false;
+          this.annenLoading = true;
         });
       }
     };
@@ -65,9 +74,9 @@ export default {
     <header> 
       <SymbolForm v-show="!isBubbleChartFullScreen" :tickerPrice="tickerPrice" />
     </header>
-    <!--<button @click="toggle_autoScale()">Toggle Auto Scale</button>-->
     <div id="charts_flex" class="flex-container">
       <bubble-chart v-if="showBubbleChart" ref="bubbleChart" :rawData="rawData" @fullscreen-change="handleFullscreenChange"/>
+      <div class="bars-4" v-show="annenLoading"></div>
     </div>
   </body>
 </template>
@@ -79,6 +88,9 @@ export default {
   }
   html {
     height: 100%;
+  }
+  body {
+    margin-top: 2vh;
   }
 
   header {
@@ -98,17 +110,23 @@ export default {
     display: flex;
     flex-direction: column;
   }
-
-  body {
-    margin-top: 2vh;
-  }
-
-  #annenLoading {
+  .bars-4 {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%; 
-    z-index: 1;
+    top: 47vh;
+    width: 45px;
+    aspect-ratio: 1;
+    --c: no-repeat linear-gradient(#c0c0c0 calc(50% - 10px),#0000 0 calc(50% + 10px),#c0c0c0 0);
+    background: 
+      var(--c) 0%   100%,
+      var(--c) 50%  100%,
+      var(--c) 100% 100%;
+    background-size: 20% calc(200% + 20px);
+    animation:b4 1s infinite linear;
+  }
+  @keyframes b4 {
+      33%  {background-position: 0% 50%,50% 100%,100% 100%}
+      50%  {background-position: 0%  0%,50%  50%,100% 100%}
+      66%  {background-position: 0%  0%,50%   0%,100%  50%}
+      100% {background-position: 0%  0%,50%   0%,100%   0%}
   }
 </style>
