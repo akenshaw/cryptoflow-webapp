@@ -460,11 +460,9 @@
     processedData = [];
   };
 
+  let sizes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16, 18, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100];
   const scale_size_fixed = (price, quantity) => {
     let quoteQty = price * quantity;
-      
-    let sizes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16, 18, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100];
-
     let index = binarySearch(thresholdsStore.$state.thresholds, quoteQty);
     return sizes[index];
   };

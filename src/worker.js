@@ -43,22 +43,13 @@ class OrderBook {
             this.order_book['bids'], this.order_book['asks'], bids_array, asks_array);
     };
 
-    async prepare_order_book(bids, asks, new_bids, new_asks) {    
-        new_bids = new_bids.filter(bid => bid[0] >= bids[bids.length-1][0]);
-        new_asks = new_asks.filter(ask => ask[0] <= asks[asks.length-1][0]);
+    async prepare_order_book(bids, asks, new_bids, new_asks) {
+        const bidsMap = new Map([...bids, ...new_bids].filter(bid => bid[0] >= bids[bids.length-1][0]));
+        const asksMap = new Map([...asks, ...new_asks].filter(ask => ask[0] <= asks[asks.length-1][0]));
 
-        const bidsMap = new Map(new_bids.map(bid => [bid[0], bid[1]]));
-        const asksMap = new Map(new_asks.map(ask => [ask[0], ask[1]]));
+        bids = Array.from(bidsMap.entries()).filter(bid => bid[1] !== 0).sort((a, b) => b[0] - a[0]);
+        asks = Array.from(asksMap.entries()).filter(ask => ask[1] !== 0).sort((a, b) => a[0] - b[0]);
 
-        bids = bids.map(bid => [bid[0], bidsMap.has(bid[0]) ? bidsMap.get(bid[0]) : bid[1]]);
-        asks = asks.map(ask => [ask[0], asksMap.has(ask[0]) ? asksMap.get(ask[0]) : ask[1]]);
-    
-        bids = bids.concat([...bidsMap.entries()].filter(([price, _]) => !bids.some(bid => bid[0] === price)));
-        asks = asks.concat([...asksMap.entries()].filter(([price, _]) => !asks.some(ask => ask[0] === price)));
-    
-        bids = bids.filter(bid => bid[1] !== 0).sort((a, b) => b[0] - a[0]);
-        asks = asks.filter(ask => ask[1] !== 0).sort((a, b) => a[0] - b[0]);
-    
         return [bids, asks];
     };
 }
