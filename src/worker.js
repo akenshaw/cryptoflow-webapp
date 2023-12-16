@@ -1,4 +1,4 @@
-console.log("worker_v0.1.1-alpha");
+console.log("worker_v0.1.2-alpha");
 
 class OrderBook {
     constructor(bids, asks) {
