@@ -209,12 +209,7 @@
 
         this.symbolName = data.symbol;
         this.$refs.price24hr.style.color = data.priceChangePercent > 0 ? '#51CDA0' : '#C0504E';
-
-        if (data.priceChangePercent > 0) {
-          this.price24hr = `+${data.priceChangePercent}%`;
-        } else {
-          this.price24hr = `${data.priceChangePercent}%`;
-        }
+        this.price24hr = `${data.priceChangePercent > 0 ? '+' : ''}${data.priceChangePercent}%`;
 
         const formattedVolume = new Intl.NumberFormat('en-US', {
             style: 'currency',
@@ -227,12 +222,8 @@
         try {
           const response1 = await fetch(`https://fapi.binance.com/fapi/v1/premiumIndex?symbol=${symbol}`);
           const data1 = await response1.json();
-          const formattedFundingRate = new Intl.NumberFormat('en-US', {
-            style: 'percent',
-            minimumFractionDigits: 4,
-          }).format(data1.lastFundingRate);
+          const formattedFundingRate = Math.round((parseFloat(data1.lastFundingRate) * 100) * 10000) / 10000 + '%';
           this.fundingRate = formattedFundingRate;
-          const indexPrice = data1.indexPrice;
 
           const response2 = await fetch(`https://fapi.binance.com/fapi/v1/openInterest?symbol=${symbol}`);
           const data2 = await response2.json();
@@ -240,7 +231,7 @@
             style: 'currency',
             currency: 'USD',
             maximumFractionDigits: 0,
-          }).format((data2.openInterest) * Math.round(indexPrice * 10000) / 10000);
+          }).format((data2.openInterest) * Math.round(data1.indexPrice * 10000) / 10000);
           this.openInterestValue = formattedOpenInterest;
           this.openInterestQty = `~${data2.openInterest}`;
 
@@ -375,9 +366,10 @@
           </div>
         </div>
       </form>
+      <div v-if="loader" class="spinner-3" style="grid-column: 4; grid-row: 1;"></div>
     </div>
 
-    <div v-if="loader" id="loader" class="loader" style="grid-column: 4; grid-row: 1;"></div>
+   
     
     <div id="dynamicNumber" style="grid-column: 2; grid-row: 1;">
       <span>{{ symbolName }}</span>
@@ -453,6 +445,7 @@
   }
 
   #symbolContainer {
+    position: relative;
     font-family: 'Fira Mono', monospace;
     display: flex;
     justify-content: center;
@@ -526,19 +519,26 @@
   #rangeContainer button {
     padding: 0.5vh;
   }
-  .loader {
-    position: relative;
-    border: 0.5vh solid #c0c0c0;
-    border-radius: 100%;
-    border-top: 0.5vh solid #404040;
-    width: 1vh;
-    height: 1vh;
-    -webkit-animation: spin 0.5s ease-in-out infinite;
-    animation: spin 0.5s ease-in-out infinite;
-    margin-left: 1vw;
-    margin-top: 1vh;
-    box-shadow: 1px 0px 8px 0px rgba(0, 0, 0, 0.5);
+  .spinner-3 {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0.4vh;
+    width: 0.5vw;
+    padding: 0.4vh;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #c0c0c0;
+    --_m: 
+      conic-gradient(#0000 10%,#000),
+      linear-gradient(#000 0 0) content-box;
+    -webkit-mask: var(--_m);
+            mask: var(--_m);
+    -webkit-mask-composite: source-out;
+            mask-composite: subtract;
+    animation: s3 0.6s infinite linear;
   }
+  @keyframes s3 {to{transform: rotate(1turn)}}
   
   #symbolDropdown {
     text-align: right;
@@ -555,7 +555,7 @@
     margin-left: 35%;
     border-radius: 1%;
     padding: 0.5vh;
-    margin-top: 6vh;
+    margin-top: 5.5vh;
     box-shadow: 0px 8px 20px 5px rgba(0, 0, 0, 0.5);
   }
   #symbolDropdown table {

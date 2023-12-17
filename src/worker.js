@@ -105,8 +105,8 @@ function createWebSocket(symbol) {
 
 function setupEventListeners(socket) {
     socket.addEventListener('open', () => {
-        self.postMessage({ type: 1 });
         order_book.refresh_order_book(lowercaseSymbol);
+        self.postMessage({ type: 1 });
     });
     socket.addEventListener('close', () => {
         console.log('worker.js: WebSocket connection closed');

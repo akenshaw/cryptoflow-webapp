@@ -402,7 +402,7 @@
     const buyBubblesBuffer = [];
     scaledAggTradeBuffer.forEach(point => {
       if (point.r !== 0) {
-        const mappedPoint = {x: point.x, y: point.y, _custom: point.r, originalRadius: point.originalRadius};
+        const mappedPoint = {x: update_time, y: point.y, _custom: point.r, originalRadius: point.originalRadius};
         if (point.m) {
           sellBubblesBuffer.push(mappedPoint);
         } else {
