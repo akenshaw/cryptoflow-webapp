@@ -355,7 +355,7 @@
             <button id="dropdownButton" ref="dropdownButton" type="button" @click="toggleDropdown()" :disabled="dropdownDisabled" class="dropbtn"> 
               <font-awesome-icon :icon="['fas', 'list']" />
             </button>
-            <input ref="symbolInput" v-model="searchTerm" style="margin-right: 1vh;" type="text" id="symbolInput" name="symbol" placeholder="Symbol" @input="handleInput" autocomplete="off"/>
+            <input ref="symbolInput" v-model="searchTerm" style="margin-right: 0.5vw;" type="text" id="symbolInput" name="symbol" placeholder="Symbol" @input="handleInput" autocomplete="off"/>
           </div>
           <button type="button" id="terminateButton" :disabled="terminateButtonDisabled" @click="terminate_ws()">Terminate</button>     
           <button type="button" :disabled="fetchButtonDisabled" id="fetchButton" @click="update_metrics()">Fetch metrics</button>
@@ -368,20 +368,18 @@
       </form>
       <div v-if="loader" class="spinner-3" style="grid-column: 4; grid-row: 1;"></div>
     </div>
-
-   
-    
+  
     <div id="dynamicNumber" style="grid-column: 2; grid-row: 1;">
       <span>{{ symbolName }}</span>
-      <div id="symbolProperties" style="text-align: right; font-size: 1.1vh;">
+      <div id="symbolProperties" style="text-align: right; font-size: 0.5em;">
         <text style="opacity: 0.85;">{{ fundingRate }}</text>
         <div ref="openInterestValue" style="display: inline-block;">
-          <text style="padding-left: 0.7vh; opacity: 0.85;">{{ openInterestValue }}</text><br>
+          <text style="padding-left: 0.5vw; opacity: 0.85;">{{ openInterestValue }}</text><br>
         </div>
-        <div style="font-size: 0.9vh; opacity: 0.5;" ref="openInterestQty">
+        <div style="font-size: 0.7em; opacity: 0.5;" ref="openInterestQty">
           <text>{{ openInterestQty }}</text>
         </div>
-        <div style="font-size: 0.9vh; opacity: 0.5;" ref="openInterest24hr">
+        <div style="font-size: 0.7em; opacity: 0.5;" ref="openInterest24hr">
           <text>{{ openInterest24hr }}</text>
         </div>
       </div>
@@ -389,9 +387,9 @@
 
     <div id="volume_box" style="grid-column: 4; grid-row: 1;">
       <span :style="tickerStyle" >{{ tickerPrice }}</span>
-      <div id="volumeProperties" style="font-size: 1.1vh;">
+      <div id="volumeProperties" style="font-size: 0.5em;">
         <text style="opacity: 0.85;">{{ volume24hr }}</text>
-        <div style="font-size: 1vh; opacity: 0.6; margin-top: 0.4vh;" ref="price24hr">
+        <div style="font-size: 0.7em; opacity: 0.6; margin-top: 0.2vh;" ref="price24hr">
           <text>{{ price24hr }}</text>
         </div>
       </div>
@@ -452,7 +450,7 @@
     align-items: center;
     flex-wrap: wrap;
     background-color: #17131A;
-    padding: 1.5vh;
+    padding: 1vw;
     border: 2px solid #4d4d4d;
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
     border-radius: 1vh;
@@ -466,7 +464,7 @@
   #buttonGrid {
     display: flex;
     grid-template-columns: repeat(5, 1fr);
-    gap: 1vh;
+    gap: 0.4vw;
   }
 
   #symbolForm button {
@@ -474,9 +472,9 @@
     color: rgba(200, 200, 200);
     border: none;
     text-align: center;
-    font-size: 1.2vh;
+    font-size: 1.3vh;
     cursor: pointer;
-    border-radius: 0.2vh;
+    border-radius: 4px;
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
   }
 
@@ -485,6 +483,7 @@
     align-items: center;
     background-color: #38343C;
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
   }
 
   #symbolInputContainer button {
@@ -493,12 +492,13 @@
     border: none;
     text-align: center;
     cursor: pointer;
-    border-radius: 0.2vh 0 0 0.2vh;
+    border-radius: 0.2vw;
   }
 
   #symbolInputContainer input[type=text] {
     border: none;
-    font-size: 0.6vw;
+    font-size: 1.1vh;
+    width: 5vw;
     background: #17131A;
     color: rgb(200, 200, 200);
   }
@@ -513,6 +513,7 @@
   }
   .slider {
     transition: opacity 0.5s;
+    width: 5vw;
     accent-color: rgba(200, 200, 200);
   }
 
@@ -550,16 +551,44 @@
     overflow: auto;
     z-index: 4;
     height: 40vh; 
-    width: 28vw;
-    font-size: 0.6vw;
-    margin-left: 35%;
+    width: 24vw;
+    font-size: 1vh;
+    margin-left: 37%;
     border-radius: 1%;
     padding: 0.5vh;
     margin-top: 5.5vh;
     box-shadow: 0px 8px 20px 5px rgba(0, 0, 0, 0.5);
-  }
+  } 
   #symbolDropdown table {
     width: 100%;
+  }
+  @media only screen and (max-width: 1200px) {
+    #symbolForm button {
+      font-size: 1vh;
+    }
+
+    #symbolDropdown {
+      width: 80vw; 
+      font-size: 1.5vw;
+      margin-left: 2%;
+    } 
+    #volume_box, #dynamicNumber {
+      font-size: 1.6vh;
+      color: rgba(200, 200, 200);
+      text-shadow: 2px 4px 4px rgba(0,0,0,0.2), 0px -5px 10px rgba(255,255,255,0.15);
+    }
+
+    #volume_box {
+      display: inline-block; 
+      text-align: left;
+      padding-left: 2vw;
+    }
+
+    #dynamicNumber {
+      display: inline-block; 
+      text-align: right;
+      padding-right: 2vw;
+    }
   }
   @-webkit-keyframes spin {
     0% { -webkit-transform: rotate(0deg); }

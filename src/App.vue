@@ -37,28 +37,23 @@ export default {
     this.worker.onmessage = (event) => {
       if (event.data.type === 'u') {
         if (this.isFirstMessage) {
-          this.annenLoading = false;
+          this.$nextTick(() => { this.annenLoading = false; this.showBubbleChart = true });
           this.isFirstMessage = false;
-          this.showBubbleChart = true;
-        }
+        };
         this.rawData = event.data;
         if (!this.isBubbleChartFullScreen) { 
-          this.tickerPrice = parseFloat(event.data.depth.bids[0][0]); 
-        }
+          this.tickerPrice = parseFloat(event.data.depth.bids[0][0]) 
+        };
         
       } else if (event.data.type === 1) {
         console.log('WebSocket connection opened'); 
+        this.$nextTick(() => { this.annenLoading = true });
         this.isFirstMessage = true;  
-        this.annenLoading = true; 
-                
+
       } else if (event.data.type === 0) {
         console.log('Closing previous websocket connection...');
-
+        this.$nextTick(() => { this.showBubbleChart = false; this.annenLoading = true });
         this.rawData = {};
-        this.$nextTick(() => {
-          this.showBubbleChart = false;
-          this.annenLoading = true;
-        });
       }
     };
   },
@@ -99,12 +94,13 @@ export default {
     font-family: 'Fira Mono', monospace;
     border-top: 0.2vh solid #4d4d4d;
     width: 100%; 
-    z-index: 1;
+    z-index: 4;
   }
 
   #charts_flex {
     display: flex;
     justify-content: center;
+    z-index: 1;
   }
   .sub-flex-container {
     display: flex;

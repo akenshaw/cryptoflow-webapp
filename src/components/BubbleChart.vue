@@ -556,8 +556,9 @@
   flex-direction: row;
 }
 .chart-controls button {
-  width: 40px;
-  height: 40px;
+  margin: 5px;
+  width: 30px;
+  height: 30px;
   border: none;
   background-color: transparent;
   cursor: pointer;
