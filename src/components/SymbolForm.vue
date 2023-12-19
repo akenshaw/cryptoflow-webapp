@@ -362,7 +362,7 @@
           <div id="rangeContainer">
             <button type="button" id="rangeButton" @click="toggleSlider = !toggleSlider">Min size</button>
             <input type="range" min="500" max="10000" step="250" class="slider" id="minRange" v-model="localMinThreshold" v-show="toggleSlider">
-            <div style="font-size: 1vh" v-show="toggleSlider">${{ localMinThreshold }}</div>
+            <div style="font-size: 0.7rem" v-show="toggleSlider">${{ localMinThreshold }}</div>
           </div>
         </div>
       </form>
@@ -374,12 +374,12 @@
       <div id="symbolProperties" style="text-align: right; font-size: 0.5em;">
         <text style="opacity: 0.85;">{{ fundingRate }}</text>
         <div ref="openInterestValue" style="display: inline-block;">
-          <text style="padding-left: 0.5vw; opacity: 0.85;">{{ openInterestValue }}</text><br>
+          <text style="padding-left: 10px; opacity: 0.85;">{{ openInterestValue }}</text><br>
         </div>
-        <div style="font-size: 0.7em; opacity: 0.5;" ref="openInterestQty">
+        <div style="font-size: 0.8em; opacity: 0.5;" ref="openInterestQty">
           <text>{{ openInterestQty }}</text>
         </div>
-        <div style="font-size: 0.7em; opacity: 0.5;" ref="openInterest24hr">
+        <div style="font-size: 0.8em; opacity: 0.5;" ref="openInterest24hr">
           <text>{{ openInterest24hr }}</text>
         </div>
       </div>
@@ -389,7 +389,7 @@
       <span :style="tickerStyle" >{{ tickerPrice }}</span>
       <div id="volumeProperties" style="font-size: 0.5em;">
         <text style="opacity: 0.85;">{{ volume24hr }}</text>
-        <div style="font-size: 0.7em; opacity: 0.6; margin-top: 0.2vh;" ref="price24hr">
+        <div style="font-size: 0.8em; opacity: 0.6; margin-top: 0.2vh;" ref="price24hr">
           <text>{{ price24hr }}</text>
         </div>
       </div>
@@ -407,7 +407,7 @@
               <th id="volumeHeader" @click="sortTable('volume')">Volume</th>
             </tr>
           </thead>
-          <tbody ref="tBody" id="tableBody">
+          <tbody>
             <tr v-for="(value, key, index) in filteredItems" :key="key" :class="index % 2 === 0 ? 'even-row' : 'odd-row'" @click="handleSymbolChange(key)">
               <td>{{ key }}</td>
               <td>{{ formatNumber(value.mark_price, 'mark_price') }}</td>
@@ -425,21 +425,18 @@
     
 <style scoped>
   #volume_box, #dynamicNumber {
-    font-size: 2.2vh;
+    display: inline-block; 
+    font-size: clamp(15px, 1vw, 50px);
     color: rgba(200, 200, 200);
     text-shadow: 2px 4px 4px rgba(0,0,0,0.2), 0px -5px 10px rgba(255,255,255,0.15);
   }
-
   #volume_box {
-    display: inline-block; 
     text-align: left;
-    padding-left: 3vw;
+    padding-left: clamp(0.5vw, 2vw, 5vw);
   }
-
   #dynamicNumber {
-    display: inline-block; 
     text-align: right;
-    padding-right: 3vw;
+    padding-right: clamp(0.5vw, 2vw, 5vw);
   }
 
   #symbolContainer {
@@ -455,29 +452,25 @@
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
     border-radius: 1vh;
   }
-  
   #symbolContainer button:hover {
     background-color: #404040; 
     color: rgba(200, 200, 200); 
   }
-
   #buttonGrid {
     display: flex;
     grid-template-columns: repeat(5, 1fr);
     gap: 0.4vw;
   }
-
   #symbolForm button {
     background-color: #38343C;
     color: rgba(200, 200, 200);
     border: none;
     text-align: center;
-    font-size: 1.3vh;
+    font-size: clamp(9px, 0.5vw, 20px);
     cursor: pointer;
     border-radius: 4px;
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
   }
-
   #symbolInputContainer {
     display: flex;
     align-items: center;
@@ -485,7 +478,6 @@
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
     border-radius: 4px;
   }
-
   #symbolInputContainer button {
     background-color: #38343C;
     color: rgba(200, 200, 200);
@@ -494,19 +486,16 @@
     cursor: pointer;
     border-radius: 0.2vw;
   }
-
   #symbolInputContainer input[type=text] {
     border: none;
-    font-size: 1.1vh;
+    font-size: clamp(10px, 0.5vw, 40px);
     width: 5vw;
     background: #17131A;
     color: rgb(200, 200, 200);
   }
-
   #symbolInputContainer input[type=text]:hover {
     background-color: #404040; 
   }
-
   #rangeContainer {
     display: flex;
     align-items: center;
@@ -546,14 +535,12 @@
     font-family: 'Fira Mono', monospace;
     background-color: #9f9f9f; 
     color: #17131A;
-    backdrop-filter: blur(10px);
     position: absolute;
     overflow: auto;
-    z-index: 4;
     height: 40vh; 
-    width: 24vw;
-    font-size: 1vh;
-    margin-left: 37%;
+    width: 27vw;
+    margin-left: 35%;
+    font-size: clamp(10px, 0.5vw, 40px);
     border-radius: 1%;
     padding: 0.5vh;
     margin-top: 5.5vh;
@@ -563,33 +550,13 @@
     width: 100%;
   }
   @media only screen and (max-width: 1200px) {
-    #symbolForm button {
-      font-size: 1vh;
-    }
-
     #symbolDropdown {
       width: 80vw; 
       font-size: 1.5vw;
       margin-left: 2%;
     } 
-    #volume_box, #dynamicNumber {
-      font-size: 1.6vh;
-      color: rgba(200, 200, 200);
-      text-shadow: 2px 4px 4px rgba(0,0,0,0.2), 0px -5px 10px rgba(255,255,255,0.15);
-    }
-
-    #volume_box {
-      display: inline-block; 
-      text-align: left;
-      padding-left: 2vw;
-    }
-
-    #dynamicNumber {
-      display: inline-block; 
-      text-align: right;
-      padding-right: 2vw;
-    }
   }
+
   @-webkit-keyframes spin {
     0% { -webkit-transform: rotate(0deg); }
     100% { -webkit-transform: rotate(360deg); }
