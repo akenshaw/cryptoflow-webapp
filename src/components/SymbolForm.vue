@@ -3,8 +3,8 @@
 
   import { library } from '@fortawesome/fontawesome-svg-core'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-  import { faList, faHome } from '@fortawesome/free-solid-svg-icons'
-  library.add(faList, faHome)
+  import { faBarsStaggered, faHome, faGears, faArrowRotateRight } from '@fortawesome/free-solid-svg-icons'
+  library.add(faBarsStaggered, faHome, faGears, faArrowRotateRight)
 
   export default {
     components : {
@@ -345,24 +345,25 @@
 </script>
 
 <template>
-  <div style="display: grid; grid-template-columns: 1fr 1fr 2fr 1fr 1fr; margin: auto; user-select: none;">
+  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; margin: auto; user-select: none;">
 
     <div id="symbolContainer" style="grid-column: 3; grid-row: 1;">
       <form method="get" id="symbolForm" style="position: relative;" @submit.prevent>
         <div id="buttonGrid">
           <button type="button" id="navigateButton"><font-awesome-icon icon="fa-solid fa-house" /></button>
+          <button type="button" :disabled="fetchButtonDisabled" id="fetchButton" @click="update_metrics()"><font-awesome-icon icon="fa-solid fa-arrow-rotate-right" /></button>
           <div id="symbolInputContainer">
             <button id="dropdownButton" ref="dropdownButton" type="button" @click="toggleDropdown()" :disabled="dropdownDisabled" class="dropbtn"> 
-              <font-awesome-icon :icon="['fas', 'list']" />
+              <font-awesome-icon icon="fa-solid fa-bars-staggered" />
             </button>
-            <input ref="symbolInput" v-model="searchTerm" style="margin-right: 0.5vw;" type="text" id="symbolInput" name="symbol" placeholder="Symbol" @input="handleInput" autocomplete="off"/>
-          </div>
-          <button type="button" id="terminateButton" :disabled="terminateButtonDisabled" @click="terminate_ws()">Terminate</button>     
-          <button type="button" :disabled="fetchButtonDisabled" id="fetchButton" @click="update_metrics()">Fetch metrics</button>
+            <input ref="symbolInput" v-model="searchTerm" style="margin-right: 0.5vh;" type="text" id="symbolInput" name="symbol" placeholder="Symbol" @input="handleInput" autocomplete="off"/>
+          </div>     
           <div id="rangeContainer">
-            <button type="button" id="rangeButton" @click="toggleSlider = !toggleSlider">Min size</button>
-            <input type="range" min="500" max="10000" step="250" class="slider" id="minRange" v-model="localMinThreshold" v-show="toggleSlider">
-            <div style="font-size: 0.7rem" v-show="toggleSlider">${{ localMinThreshold }}</div>
+            <button type="button" id="rangeButton" @click="toggleSlider = !toggleSlider"><font-awesome-icon icon="fa-solid fa-gears" /></button>
+            <div id="sliderTooltip" v-show="toggleSlider">
+              <text style="font-size: 0.7rem">${{ localMinThreshold }}</text>
+              <input type="range" min="500" max="10000" step="250" class="slider" id="minRange" v-model="localMinThreshold">
+            </div>
           </div>
         </div>
       </form>
@@ -389,7 +390,7 @@
       <span :style="tickerStyle" >{{ tickerPrice }}</span>
       <div id="volumeProperties" style="font-size: 0.5em;">
         <text style="opacity: 0.85;">{{ volume24hr }}</text>
-        <div style="font-size: 0.8em; opacity: 0.6; margin-top: 0.2vh;" ref="price24hr">
+        <div style="font-size: 0.9em; opacity: 0.6; margin-top: 0.2vh;" ref="price24hr">
           <text>{{ price24hr }}</text>
         </div>
       </div>
@@ -419,7 +420,6 @@
         </table>
       </div>
     </transition>
-
   </div>
 </template>
     
@@ -466,7 +466,7 @@
     color: rgba(200, 200, 200);
     border: none;
     text-align: center;
-    font-size: clamp(9px, 0.5vw, 20px);
+    font-size: clamp(12px, 0.6vw, 15px);
     cursor: pointer;
     border-radius: 4px;
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
@@ -499,15 +499,30 @@
   #rangeContainer {
     display: flex;
     align-items: center;
+    position: relative;
   }
   .slider {
     transition: opacity 0.5s;
-    width: 5vw;
+    width: calc(5vw + 50px);
     accent-color: rgba(200, 200, 200);
   }
-
   #rangeContainer button {
-    padding: 0.5vh;
+    padding: 0.6vh;
+  }
+  #sliderTooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #404040;
+    border: 1px solid #17131A;
+    padding: 0.4vh;
+    border-radius: 5px;
+    z-index: 1;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    box-shadow: 0px 8px 20px 5px rgba(0, 0, 0, 0.5);
   }
   .spinner-3 {
     position: absolute;
@@ -528,8 +543,9 @@
             mask-composite: subtract;
     animation: s3 0.6s infinite linear;
   }
-  @keyframes s3 {to{transform: rotate(1turn)}}
-  
+  @keyframes s3 {
+    to{transform: rotate(1turn)}
+  }
   #symbolDropdown {
     text-align: right;
     font-family: 'Fira Mono', monospace;
