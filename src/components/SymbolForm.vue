@@ -15,7 +15,7 @@
         thresholdsStore: useThresholdsStore(),
         tickerStyle: {},
         dropdownDisabled: false,
-        fetchButtonDisabled: false,
+        fetchButtonDisabled: true,
         terminateButtonDisabled: false,
         toggleSlider: false,
         symbolName: null,
@@ -284,12 +284,10 @@
 
       async handleSymbolChange(newSymbol) {
         this.searchTerm = '';
-
         if (this.showTable) {
           this.loader = true;
           this.showTable = false;
         }
-
         console.log('Handling symbol change to ' + newSymbol);
         this.currentSymbol = newSymbol;
         await this.initialize(newSymbol);
@@ -299,24 +297,26 @@
           symbol: newSymbol
         });
       },
+
       async initialize(symbol) {
         this.rollingMetrics(symbol);
         this.historicalOpenInterest = await this.fetch_hist_OI(symbol);
         this.compare_OI(symbol);
         this.loader = false;
+        this.fetchButtonDisabled = false;
       },
+
       async terminate_ws() {
         this.terminateButtonDisabled = true;
         this.loader = true;
         this.$root.worker.postMessage({
           type: 'terminateWebsocket'
         });
-
         await new Promise(resolve => setTimeout(resolve, 1500));
         this.terminateButtonDisabled = false;
         location.reload();
       },
-
+      
       closeDropdownOnClickOutside(event) {
         const dropdownButton = this.$refs.dropdownButton;
         const symbolDropdown = this.$refs.symbolDropdown;
