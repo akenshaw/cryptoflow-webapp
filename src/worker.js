@@ -45,36 +45,30 @@ class OrderBook {
 
 	async prepare_order_book(bids, asks, new_bids, new_asks) {
 		try {
-			const bidsMap = new Map(bids);
-			const asksMap = new Map(asks);
-	
-			new_bids.forEach(bid => {
-				if (bidsMap.has(bid[0])) {
-					bidsMap.set(bid[0], bid[1]);
-				} else {
-					bidsMap.set(bid[0], bid[1]);
-				}
-			});
-	
-			new_asks.forEach(ask => {
-				if (asksMap.has(ask[0])) {
-					asksMap.set(ask[0], ask[1]);
-				} else {
-					asksMap.set(ask[0], ask[1]);
-				}
-			});
-	
+			const bidsMap = new Map([...bids, ...new_bids].filter(bid => bid[0] >= bids[bids.length-1][0]));
+			const asksMap = new Map([...asks, ...new_asks].filter(ask => ask[0] <= asks[asks.length-1][0]));
+
 			let conc_bids = Array.from(bidsMap.entries()).filter(bid => bid[1] !== 0).sort((a, b) => b[0] - a[0]);
 			let conc_asks = Array.from(asksMap.entries()).filter(ask => ask[1] !== 0).sort((a, b) => a[0] - b[0]);
-		
+
+			if (conc_bids[0][0] >= conc_asks[0][0]) {
+				conc_bids = conc_bids.filter(bid => bid[0] < new_bids[new_bids.length-1][0]);
+				conc_asks = conc_asks.filter(ask => ask[0] > new_asks[0][0]);
+
+				console.log("Error: bids[0] >= asks[0], rehandled to: ", conc_bids[0][0], conc_asks[0][0]);
+			};
+
 			return [conc_bids, conc_asks];
 	
 		} catch (error) {
 			console.error('Error preparing order book:', error);
-		  
+	
+			new_bids = new_bids.filter(bid => bid[0] >= bids[bids.length-1][0]);
+			new_asks = new_asks.filter(ask => ask[0] <= asks[asks.length-1][0]);
+	
 			return [new_bids, new_asks];
 		};  
-	};	
+	};
 }
 
 let socket;
