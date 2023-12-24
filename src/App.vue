@@ -40,20 +40,20 @@ export default {
           this.$nextTick(() => { this.annenLoading = false; this.showBubbleChart = true });
           this.isFirstMessage = false;
         };
-        this.rawData = event.data;
+        
         if (!this.isBubbleChartFullScreen) { 
           this.tickerPrice = parseFloat(event.data.depth.bids[0][0]) 
         };
+        this.rawData = event.data;
         
       } else if (event.data.type === 1) {
         console.log('WebSocket connection opened'); 
-        this.$nextTick(() => { this.annenLoading = true });
+        this.$nextTick(() => { this.annenLoading = true; this.rawData = {} });
         this.isFirstMessage = true;  
 
       } else if (event.data.type === 0) {
         console.log('Closing previous websocket connection...');
         this.$nextTick(() => { this.showBubbleChart = false; this.annenLoading = true });
-        this.rawData = {};
       }
     };
   },
