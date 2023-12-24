@@ -327,6 +327,10 @@
       },
     },
     mounted() {
+      this.$gtag.event('screen_view', {
+        'screen_name': 'SymbolForm',
+      });
+
       //await this.fetchSymbols();
       document.addEventListener('click', this.closeDropdownOnClickOutside);
 
