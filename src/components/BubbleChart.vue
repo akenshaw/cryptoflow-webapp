@@ -499,7 +499,7 @@
 
     currentArrowIcon = isFullScreen.value ? 'fa-solid fa-down-left-and-up-right-to-center' : 'fa-solid fa-up-right-and-down-left-from-center';
     if (isFullScreen.value) {
-      chartWidth = '100vw';
+      chartWidth = '95vw';
       chartHeight = '90vh';
     } else {
       chartWidth = '80vw';
@@ -562,6 +562,7 @@
   border: none;
   background-color: transparent;
   cursor: pointer;
+  border-radius: 4px;
 }
 .chart-controls button:hover {
   background-color: rgb(130, 130, 130); 

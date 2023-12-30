@@ -42,7 +42,6 @@
         default: null
       },
     },
-
     watch: {
       tickerPrice(newVal, oldVal) {
         if (newVal > oldVal) {
@@ -355,15 +354,15 @@
       <form method="get" id="symbolForm" style="position: relative;" @submit.prevent>
         <div id="buttonGrid">
           <button type="button" id="navigateButton"><font-awesome-icon icon="fa-solid fa-house" /></button>
-          <button type="button" :disabled="fetchButtonDisabled" id="fetchButton" @click="update_metrics()"><font-awesome-icon icon="fa-solid fa-arrow-rotate-right" /></button>
+          <button type="button" :disabled="fetchButtonDisabled" id="fetchButton" title="Refresh ticker's rolling metrics" @click="update_metrics()"><font-awesome-icon icon="fa-solid fa-arrow-rotate-right" /></button>
           <div id="symbolInputContainer">
-            <button id="dropdownButton" ref="dropdownButton" type="button" @click="toggleDropdown()" :disabled="dropdownDisabled" class="dropbtn"> 
+            <button id="dropdownButton" ref="dropdownButton" type="button"  title="Show all available tickers" @click="toggleDropdown()" :disabled="dropdownDisabled" class="dropbtn"> 
               <font-awesome-icon icon="fa-solid fa-bars-staggered" />
             </button>
-            <input ref="symbolInput" v-model="searchTerm" style="margin-right: 0.5vh;" type="text" id="symbolInput" name="symbol" placeholder="Symbol" @input="handleInput" autocomplete="off"/>
+            <input ref="symbolInput" v-model="searchTerm" style="margin-right: 0.5vh;" type="text" id="symbolInput" name="symbol" placeholder="Ticker" @input="handleInput" autocomplete="off"/>
           </div>     
           <div id="rangeContainer">
-            <button type="button" id="rangeButton" @click="toggleSlider = !toggleSlider"><font-awesome-icon icon="fa-solid fa-gears" /></button>
+            <button type="button" id="rangeButton" title="Choose the minimum size for a trade to render" @click="toggleSlider = !toggleSlider"><font-awesome-icon icon="fa-solid fa-gears" /></button>
             <div id="sliderTooltip" v-show="toggleSlider">
               <text style="font-size: 0.7rem">${{ localMinThreshold }}</text>
               <input type="range" min="500" max="10000" step="250" class="slider" id="minRange" v-model="localMinThreshold">
@@ -379,7 +378,7 @@
       <div id="symbolProperties" style="text-align: right; font-size: 0.5em;">
         <text style="opacity: 0.85;">{{ fundingRate }}</text>
         <div ref="openInterestValue" style="display: inline-block;">
-          <text style="padding-left: 10px; opacity: 0.85;">{{ openInterestValue }}</text><br>
+          <text style="padding-left: 0.5em; opacity: 0.85;">{{ openInterestValue }}</text><br>
         </div>
         <div style="font-size: 0.8em; opacity: 0.5;" ref="openInterestQty">
           <text>{{ openInterestQty }}</text>
@@ -430,7 +429,7 @@
 <style scoped>
   #volume_box, #dynamicNumber {
     display: inline-block; 
-    font-size: clamp(15px, 1vw, 50px);
+    font-size: 1.8rem;
     color: rgba(200, 200, 200);
     text-shadow: 2px 4px 4px rgba(0,0,0,0.2), 0px -5px 10px rgba(255,255,255,0.15);
   }
@@ -442,10 +441,8 @@
     text-align: right;
     padding-right: clamp(0.5vw, 2vw, 5vw);
   }
-
   #symbolContainer {
     position: relative;
-    font-family: 'Fira Mono', monospace;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -454,7 +451,7 @@
     padding: 1vw;
     border: 2px solid #4d4d4d;
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
-    border-radius: 1vh;
+    border-radius: 16px;
   }
   #symbolContainer button:hover {
     background-color: #404040; 
@@ -470,7 +467,7 @@
     color: rgba(200, 200, 200);
     border: none;
     text-align: center;
-    font-size: clamp(12px, 0.6vw, 15px);
+    font-size: 1.2rem;
     cursor: pointer;
     border-radius: 4px;
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
@@ -484,11 +481,7 @@
   }
   #symbolInputContainer button {
     background-color: #38343C;
-    color: rgba(200, 200, 200);
-    border: none;
-    text-align: center;
     cursor: pointer;
-    border-radius: 0.2vw;
   }
   #symbolInputContainer input[type=text] {
     border: none;
@@ -552,7 +545,6 @@
   }
   #symbolDropdown {
     text-align: right;
-    font-family: 'Fira Mono', monospace;
     background-color: #9f9f9f; 
     color: #17131A;
     position: absolute;
@@ -560,7 +552,7 @@
     height: 40vh; 
     width: 27vw;
     margin-left: 35%;
-    font-size: clamp(10px, 0.5vw, 40px);
+    font-size: 0.9rem;
     border-radius: 1%;
     padding: 0.5vh;
     margin-top: 5.5vh;

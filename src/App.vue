@@ -79,7 +79,6 @@ export default {
 <style scoped>
   * {
     box-sizing: border-box;
-    /*outline: 1px solid rgba(255, 0, 0, 0.25);*/
   }
   html {
     height: 100%;
@@ -87,16 +86,13 @@ export default {
   body {
     margin-top: 2vh;
   }
-
   header {
     position: sticky;
-    padding: 1.5vh;
-    font-family: 'Fira Mono', monospace;
+    padding: 1.6vh;
     border-top: 0.2vh solid #4d4d4d;
     width: 100%; 
     z-index: 4;
   }
-
   #charts_flex {
     display: flex;
     justify-content: center;
