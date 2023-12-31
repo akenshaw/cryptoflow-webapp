@@ -359,7 +359,7 @@
             <button id="dropdownButton" ref="dropdownButton" type="button"  title="Show all available tickers" @click="toggleDropdown()" :disabled="dropdownDisabled" class="dropbtn"> 
               <font-awesome-icon icon="fa-solid fa-bars-staggered" />
             </button>
-            <input ref="symbolInput" v-model="searchTerm" style="margin-right: 0.5vh;" type="text" id="symbolInput" name="symbol" placeholder="Ticker" @input="handleInput" autocomplete="off"/>
+            <input ref="symbolInput" v-model="searchTerm" style="margin-right: 0.6rem;" type="text" id="symbolInput" name="symbol" placeholder="Ticker" @input="handleInput" autocomplete="off"/>
           </div>     
           <div id="rangeContainer">
             <button type="button" id="rangeButton" title="Choose the minimum size for a trade to render" @click="toggleSlider = !toggleSlider"><font-awesome-icon icon="fa-solid fa-gears" /></button>
@@ -429,7 +429,7 @@
 <style scoped>
   #volume_box, #dynamicNumber {
     display: inline-block; 
-    font-size: 1.8rem;
+    font-size: 1.4rem;
     color: rgba(200, 200, 200);
     text-shadow: 2px 4px 4px rgba(0,0,0,0.2), 0px -5px 10px rgba(255,255,255,0.15);
   }
@@ -448,7 +448,7 @@
     align-items: center;
     flex-wrap: wrap;
     background-color: #17131A;
-    padding: 1vw;
+    padding: 1rem;
     border: 2px solid #4d4d4d;
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
     border-radius: 16px;
@@ -467,7 +467,7 @@
     color: rgba(200, 200, 200);
     border: none;
     text-align: center;
-    font-size: 1.2rem;
+    font-size: 1rem;
     cursor: pointer;
     border-radius: 4px;
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
@@ -485,8 +485,8 @@
   }
   #symbolInputContainer input[type=text] {
     border: none;
-    font-size: clamp(10px, 0.5vw, 40px);
-    width: 5vw;
+    font-size: 0.8rem;
+    width: 4rem;
     background: #17131A;
     color: rgb(200, 200, 200);
   }
@@ -514,7 +514,7 @@
     background-color: #404040;
     border: 1px solid #17131A;
     padding: 0.4vh;
-    border-radius: 5px;
+    border-radius: 4px;
     z-index: 1;
     display: flex;
     flex-direction: row-reverse;
@@ -552,7 +552,7 @@
     height: 40vh; 
     width: 27vw;
     margin-left: 35%;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     border-radius: 1%;
     padding: 0.5vh;
     margin-top: 5.5vh;
